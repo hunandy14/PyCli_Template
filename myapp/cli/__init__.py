@@ -14,7 +14,7 @@ class AddWithExtraArgsCheck(click.Command):
                 ctx=ctx
             )
         return super().invoke(ctx)
-    
+
 # 自動填入剩餘參數的函數閉包
 def auto_fill_argument(required=False):
     def callback(ctx, param, value):
@@ -55,3 +55,15 @@ def echo_err_message(message, exit_code=None):
 import sys, os
 PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
 sys.path.append(PROJECT_DIR)
+
+
+
+# 自訂 type 類別 ExtPath 用例
+class ExtPath(click.Path):
+    def __init__(self, my_check=False, **kwargs):
+        self.my_check = my_check
+        super().__init__(**kwargs)
+
+    def convert(self, value, param, ctx):
+        print(f"ExtPath.convert():: 啟動此函數的對象參數是 {param.name} 目前值為 {value}, 自訂參數 my_check={self.my_check}")
+        return super().convert(value, param, ctx)
