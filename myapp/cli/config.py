@@ -22,3 +22,11 @@ def demo(path, identity, type, args):
 @command.forward
 def info():
     """獲取從cli設置的初始化信息"""
+
+# 群組命令3:: demo2
+@entry.command()
+@click.argument('name', required=True, nargs=1)
+@click.argument('path', required=True, nargs=-1)
+def demo2(name, path):
+    cli.echo_inf_message(f"[\n    name: {name}\n    path: {path}\n]")
+    """獲取從cli設置的初始化信息"""

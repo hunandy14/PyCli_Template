@@ -38,10 +38,13 @@ def auto_fill_argument(required=False):
 
 
 import click
+def echo_inf_message(message):
+    click.echo(click.style(message, fg='blue', bold=True))
 def echo_std_message(message):
     click.echo(message, err=False)
-def echo_err_message(message):
+def echo_err_message(message, exit_code=None):
     click.echo(message, err=True)
+    if exit_code: sys.exit(exit_code)
 
 import sys, os
 PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
