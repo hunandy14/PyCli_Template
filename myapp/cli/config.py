@@ -30,3 +30,12 @@ def info():
 def demo2(name, path):
     cli.echo_inf_message(f"[\n    name: {name}\n    path: {path}\n]")
     """獲取從cli設置的初始化信息"""
+
+# 群組命令4:: demo3
+@entry.command()
+@click.argument('name', required=True, nargs=1, type=cli.ExtPath(), cls=cli.ExtArgument, my_option=True)
+@click.argument('path', required=True, nargs=-1, type=cli.ExtPath(my_check=True, exists=True), cls=cli.ExtArgument, my_option='deploy.ps1')
+@click.option('--identity', '-id', type=str, required=False, help="指定ID", cls=cli.ExtOption, my_option=-1)
+def demo3(name, path, identity):
+    cli.echo_inf_message(f"[\n    name: {name}\n    path: {path}\n    identity: {identity}\n]")
+    """獲取從cli設置的初始化信息"""
