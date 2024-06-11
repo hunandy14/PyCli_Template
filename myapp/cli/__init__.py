@@ -35,6 +35,12 @@ def auto_fill_argument(required=False):
         return value
     return callback
 
+# 撤除 click 自動 glob 展開變數路徑中的萬用字元
+def disable_expand_args():
+    from click import core
+    def _no_expand_args(args): return args
+    core._expand_args = _no_expand_args
+
 
 
 import click

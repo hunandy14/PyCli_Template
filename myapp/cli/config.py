@@ -23,10 +23,22 @@ def demo(path, identity, type, args):
 def info():
     """獲取從cli設置的初始化信息"""
 
+
+
+# 自訂 type 類別 ExtPath 用例
+class ExtPath(click.Path):
+    def __init__(self, my_check=False, **kwargs):
+        self.my_check = my_check
+        super().__init__(**kwargs)
+
+    def convert(self, value, param, ctx):
+        print(f"ExtPath.convert():: 啟動此函數的對象參數是 {param.name} 目前值為 {value}, 自訂參數 my_check={self.my_check}")
+        return super().convert(value, param, ctx)
+
 # 群組命令3:: demo2
 @entry.command()
-@click.argument('name', required=True, nargs=1)
-@click.argument('path', required=True, nargs=-1)
+@click.argument('name', required=True, nargs=1, type=ExtPath())
+@click.argument('path', required=True, nargs=-1, type=ExtPath(my_check=True, exists=True))
 def demo2(name, path):
     cli.echo_inf_message(f"[\n    name: {name}\n    path: {path}\n]")
     """獲取從cli設置的初始化信息"""
