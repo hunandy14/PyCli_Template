@@ -9,7 +9,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'MyApp=myapp.cli.config:entry',
+            'myapp=myapp.cli.config:entry',
         ],
     },
     include_package_data=True
