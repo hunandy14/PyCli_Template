@@ -1,28 +1,17 @@
 #!/bin/bash
-# 執行的特定分支名稱
-TARGET_BRANCH="dev"
-# 虛擬環境的目錄名稱
-ENV_NAME='.venv'
+
+# 設置參數
+TARGET_BRANCH="dev"         # 執行的特定分支名稱
+ENV_NAME='.venv'            # 虛擬環境的目錄名稱
 
 # 取得 Git 工作樹位置
 REPO_DIR=$(dirname $(dirname $(dirname "$(readlink -f "$0")")))
-# 虛擬環境的完整路徑
-ENV_DIR="$REPO_DIR/$ENV_NAME"
-# 檢出的目標位置
-TARGET_DIR="$ENV_DIR/src"
+ENV_DIR="$REPO_DIR/$ENV_NAME"  # 虛擬環境的完整路徑
+TARGET_DIR="$ENV_DIR/src"       # 檢出的目標位置
 
-# 定義藍色表示 info 和紅色表示錯誤 的函式
-info() {
-  local BLUE='\033[0;34m'
-  local NC='\033[0m'
-  echo -e "${BLUE}$1${NC}"
-}
-
-error() {
-  local RED='\033[0;31m'
-  local NC='\033[0m'
-  echo -e "${RED}$1${NC}"
-}
+# 定義函數
+info() { echo -e "\033[0;34m$1\033[0m"; }
+error() { echo -e "\033[0;31m$1\033[0m"; exit 1; }
 
 # 讀取 post-receive 傳入的參數
 while read oldrev newrev ref
@@ -31,20 +20,20 @@ do
     BRANCH=$(git rev-parse --symbolic --abbrev-ref $ref)
 
     # 檢查當前分支是否為指定的分支
-    if [ "$BRANCH" == "$TARGET_BRANCH" ]; then
+    if [[ "$BRANCH" == "$TARGET_BRANCH" ]]; then
         # 打印檢出分支的提示信息
         info "Checking out branch '$BRANCH' to directory: $TARGET_DIR"
 
         # 使用 GIT_WORK_TREE 設定工作目錄，並強制檢出當前分支
-        mkdir -p $TARGET_DIR && GIT_WORK_TREE=$TARGET_DIR git checkout -f $BRANCH || { error "Failed to check out branch '$BRANCH' to directory: $TARGET_DIR"; exit 1; }
+        mkdir -p $TARGET_DIR && GIT_WORK_TREE=$TARGET_DIR git checkout -f $BRANCH || error "Failed to check out branch '$BRANCH' to directory: $TARGET_DIR"
 
         # 激活虛擬環境
         info "Activating virtual environment '$ENV_NAME' at: $ENV_DIR"
-        source "$ENV_DIR/bin/activate" || { error "Failed to activate virtual environment at: $ENV_DIR"; exit 1; }
+        source "$ENV_DIR/bin/activate" || error "Failed to activate virtual environment at: $ENV_DIR"
 
         # 安裝目標目錄中的 Python 套件
         info "Installing Python packages from: $TARGET_DIR"
-        cd $REPO_DIR && pip install $TARGET_DIR || { error "Failed to install Python packages from: $TARGET_DIR"; exit 1; }
+        cd $REPO_DIR && pip install $TARGET_DIR || error "Failed to install Python packages from: $TARGET_DIR"
     else
         info "Current branch '$BRANCH' is not the target branch '$TARGET_BRANCH'. Skipping operations."
     fi
