@@ -53,5 +53,10 @@ def echo_err_message(message, exit_code=None):
     if exit_code: sys.exit(exit_code)
 
 import sys, os
-PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
+PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 sys.path.append(PROJECT_DIR)
+
+import yaml
+CRET_PATH = os.path.join(PROJECT_DIR, 'secret', 'Certification.yaml')
+with open(CRET_PATH, 'r') as file:
+    CRET_INFO = yaml.safe_load(file)
