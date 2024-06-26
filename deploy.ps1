@@ -41,6 +41,15 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+# 更新 pip
+Write-Host "Updating pip to the latest version..." -ForegroundColor DarkGray
+pip install --upgrade pip
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "ERROR: Failed to update pip." -ForegroundColor Red
+    deactivate
+    exit 1
+}
+
 # 安裝 requirements.txt 中的依賴
 Write-Host "Installing dependencies from requirements.txt..." -ForegroundColor DarkGray
 pip install -r requirements.txt
@@ -51,6 +60,10 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "Virtual environment '$Path' successfully created and dependencies installed." -ForegroundColor DarkGreen
+
+# 刪除不必要的檔案
+Write-Host "Cleaning up unnecessary files..." -ForegroundColor DarkGray
+python setup.py clean --all
 
 # 離開虛擬環境並恢復原本狀態
 deactivate
