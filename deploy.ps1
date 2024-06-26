@@ -43,7 +43,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # 更新 pip
 Write-Host "Updating pip to the latest version..." -ForegroundColor DarkGray
-pip install --upgrade pip
+& "$Path\Scripts\python.exe" -m pip install --upgrade pip
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Failed to update pip." -ForegroundColor Red
     deactivate
@@ -52,7 +52,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # 安裝 requirements.txt 中的依賴
 Write-Host "Installing dependencies from requirements.txt..." -ForegroundColor DarkGray
-pip install -r requirements.txt
+& "$Path\Scripts\python.exe" -m pip install -r requirements.txt
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Failed to install dependencies from requirements.txt." -ForegroundColor Red
     deactivate
